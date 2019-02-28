@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,13 +17,18 @@ public class Metodos {
     OutputStream os;
     InputStream is;
 
+    /**
+     * Nos conectamos con el servidor introduciendo el puerto y la ip deseada
+     */
     public void conexion() {
 
         try {
             System.out.println("Creando socket cliente");
             clienteSocket = new Socket();
             System.out.println("Estableciendo la conexi�n");
-            InetSocketAddress addr = new InetSocketAddress("localhost", 6666);
+            int puerto = Integer.parseInt(JOptionPane.showInputDialog("Introduce puerto"));
+            String ip = JOptionPane.showInputDialog("Introduce ip del servidor");
+            InetSocketAddress addr = new InetSocketAddress(ip, puerto);
             clienteSocket.connect(addr);
             os = clienteSocket.getOutputStream();
             is = clienteSocket.getInputStream();
@@ -31,7 +37,13 @@ public class Metodos {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Metodo que recibe los operandos de la interfaz grafica, envia la operacion al
+     * servidor y recibe el resultado
+     * @param enviar
+     * @return
+     * @throws IOException 
+     */
     public String operacion(String enviar) throws IOException {
         System.out.println("enviar: " +enviar);
         System.out.println("Enviando mensaje");
@@ -46,9 +58,14 @@ public class Metodos {
 
         return resultado;
     }
-
+    /**
+     * Cerramos el input, output y el socket
+     * @throws IOException 
+     */
     public void pecharConexion() throws IOException {
         System.out.println("Cerrando el socket cliente");
+        os.close();
+        is.close();
         clienteSocket.close();
         System.out.println("Terminado");
 

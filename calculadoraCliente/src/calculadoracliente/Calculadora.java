@@ -247,10 +247,10 @@ public class Calculadora extends javax.swing.JFrame {
                                 .addComponent(jTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jResta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSuma))))
+                                .addComponent(jSuma, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(102, 102, 102)
                         .addComponent(jNueve, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -300,6 +300,10 @@ public class Calculadora extends javax.swing.JFrame {
                 .addGap(0, 16, Short.MAX_VALUE))
         );
 
+        jPantalla.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        jPantalla.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jPantalla.setFocusable(false);
+        jPantalla.setMaximumSize(new java.awt.Dimension(10, 27));
         jPantalla.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPantallaActionPerformed(evt);
@@ -311,21 +315,22 @@ public class Calculadora extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPantalla)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPantalla, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPantalla, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
+                .addGap(18, 18, 18)
+                .addComponent(jPantalla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(31, 31, 31))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -392,11 +397,9 @@ public class Calculadora extends javax.swing.JFrame {
     private void jNueveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNueveActionPerformed
         jPantalla.setText(jPantalla.getText()+"9");
     }//GEN-LAST:event_jNueveActionPerformed
-
-    private void jPantallaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPantallaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPantallaActionPerformed
-
+    /*
+    Cerramos el cliente llamando al metodo pecharConexion de la clase Metodos
+    */
     private void jApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jApagarActionPerformed
         try {
             m.pecharConexion();
@@ -414,7 +417,10 @@ public class Calculadora extends javax.swing.JFrame {
         enviar = jPantalla.getText()+" "+"multiplicacion";
         jPantalla.setText(null);
     }//GEN-LAST:event_jMultiplicacionActionPerformed
-
+    /*
+    Dependiendo de si el signo - está antes o despies del operando, asignará el 
+    valor negativo o significará que queremos realizar una resta 
+    */
     private void jRestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRestaActionPerformed
         if(jPantalla.getText().equalsIgnoreCase("")){
            jPantalla.setText("-");
@@ -428,16 +434,23 @@ public class Calculadora extends javax.swing.JFrame {
         enviar = jPantalla.getText()+" "+"suma";
         jPantalla.setText(null);
     }//GEN-LAST:event_jSumaActionPerformed
-
+    /*
+    Recogemos los operandos en una variable y los enviamos al metodo operacion de la clase
+    Metodos, y vaciamos las variables
+    */
     private void jResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jResultadoActionPerformed
  
-        enviar = enviar+ " "+jPantalla.getText();        
+       enviar = enviar+ " "+jPantalla.getText(); 
+       jPantalla.setText("");
         try {
-           jPantalla.setText(m.operacion(enviar));
-           //enviar = null;
+            String aux = m.operacion(enviar);
+            jPantalla.setText(String.format("%.2f", Float.parseFloat(aux)));
+            enviar = null;
         } catch (IOException ex) {
             Logger.getLogger(Calculadora.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+
 
         
     }//GEN-LAST:event_jResultadoActionPerformed
@@ -449,6 +462,10 @@ public class Calculadora extends javax.swing.JFrame {
     private void jRaizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRaizActionPerformed
          enviar = "raiz";
     }//GEN-LAST:event_jRaizActionPerformed
+
+    private void jPantallaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPantallaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPantallaActionPerformed
 
     /**
      * @param args the command line arguments
